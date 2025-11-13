@@ -1,134 +1,89 @@
 # 🔮 Crime Type Prediction App
 
-A **Machine Learning web application** built with **Streamlit** that predicts the most likely **type of crime** in a given Indian district, state, and year based on historical data.
+## 🧩 Project Overview
 
-This project compares two classification models — **Random Forest** and **Logistic Regression** — and deploys the best-performing model as an interactive web app.
-
----
-
-## 📁 Project Structure
-
-crime_type_prediction/
-│
-├── app.py # Streamlit web app for prediction
-├── model_training.py # Model training, evaluation & saving
-├── crime_dataset.csv # Dataset containing crime statistics
-├── best_model.pkl # Trained model (Random Forest or Logistic Regression)
-├── state_encoder.pkl # Encoder for state names
-├── district_encoder.pkl # Encoder for district names
-├── crime_encoder.pkl # Encoder for crime labels
-├── requirements.txt # Dependencies for deployment
-└── README.md # Project documentation
-
-yaml
-Copy code
+The **Crime Type Prediction App** is a **Machine Learning web application** that predicts the **most likely type of crime** for a given **Indian district, state, and year** based on **historical crime data**.
 
 ---
 
-## 🎯 Objective
+### 🔍 Problem Statement
 
-To predict the **most likely type of crime** for a given:
-- **Year**
-- **State**
-- **District**
+Crime prevention and law enforcement planning often rely on analyzing historical crime trends.  
+However, **manual analysis** cannot capture complex correlations between **geography, time, and crime types**.
 
-based on historical district-level crime data.
-
----
-
-## ⚙️ How It Works
-
-1. **Data Preprocessing**  
-   - Reads the dataset (`crime_dataset.csv`)  
-   - Encodes categorical features (`state_name`, `district_name`)  
-   - Creates a target column (`top_crime`) showing the most frequent crime type per record  
-
-2. **Model Training**  
-   - Trains and compares **Random Forest Classifier** and **Logistic Regression**  
-   - Evaluates models using accuracy  
-   - Saves the best model and encoders using `pickle`  
-
-3. **Deployment**  
-   - A **Streamlit** app (`app.py`) loads the saved model and encoders  
-   - Takes user input for Year, State, and District  
-   - Predicts and displays the most likely crime type
+This project uses **machine learning** to:
+- Identify the **most probable crime** type in a given region and year  
+- Help law enforcement **anticipate and allocate resources** effectively  
+- Enable **data-driven policymaking** using predictive analytics  
 
 ---
 
-## 🧠 Machine Learning Models Used
+## 📊 Dataset Source
 
-| Model | Description | Pros | Cons |
-|--------|--------------|------|------|
-| **Random Forest Classifier** | Ensemble model combining multiple decision trees | High accuracy, handles non-linearity well | Larger model size |
-| **Logistic Regression** | Statistical model for multi-class classification | Simple, interpretable | Limited to linear relationships |
-
----
-
-## 📊 Evaluation
-
-During training (`model_training.py`):
-- Both models are trained on the same dataset.
-- Accuracy is calculated and compared.
-- The better-performing model is saved as `best_model.pkl`.
-
-Example output:
-🔹 Random Forest Accuracy: 0.85
-🔹 Logistic Regression Accuracy: 0.62
-✅ Best Model: Random Forest
-✅ Model and encoders saved successfully!
-
-yaml
-Copy code
+- **Dataset Name:** Crime Statistics of India (compiled from NCRB data)
+- **File:** `crime_dataset.csv`
+- **Size:** ~5,000+ district-level records from multiple years
+- **Key Features:**
+  - `state_name` — State name  
+  - `district_name` — District name  
+  - `year` — Year of report  
+  - Multiple columns for crime counts (murder, theft, rape, etc.)
 
 ---
 
-## 💻 Running the Project Locally
+### 🧹 Data Preprocessing Steps
 
-### 1️⃣ Install Dependencies
-pip install -r requirements.txt
-2️⃣ Train Models
-bash
-Copy code
-python model_training.py
-3️⃣ Run Streamlit App
-bash
-Copy code
-streamlit run app.py
-The app will open in your default browser at:
+| Step | Operation | Description |
+|------|------------|--------------|
+| 1️⃣ | Data Cleaning | Removed missing or inconsistent records |
+| 2️⃣ | Feature Encoding | Label encoded categorical columns (`state_name`, `district_name`) |
+| 3️⃣ | Feature Selection | Selected relevant features for classification |
+| 4️⃣ | Target Creation | Generated `top_crime` (most frequent crime type per row) |
+| 5️⃣ | Normalization | Scaled numerical data for model stability |
 
-arduino
-Copy code
-http://localhost:8501
-🌐 Deploy on Streamlit Cloud
-Push all project files to a GitHub repository.
+---
 
-Go to https://share.streamlit.io.
+## ⚙️ Methods
 
-Connect your GitHub repo.
+### 🧠 Approach
 
-Select app.py as the main file.
+Two machine learning models were trained and compared:
 
-Click Deploy 🚀
+| Model | Type | Strengths | Weaknesses | Accuracy |
+|--------|------|------------|-------------|-----------|
+| **Random Forest Classifier** | Ensemble (Decision Trees) | High accuracy, handles non-linearity | Larger model size | **0.85** |
+| **Logistic Regression** | Statistical | Simple, interpretable | Assumes linearity | 0.62 |
 
-🧾 requirements.txt
-nginx
-Copy code
-streamlit
-pandas
-scikit-learn
+✅ **Selected Model:** Random Forest (best-performing)
 
+---
 
-🧑‍💻 Author
-Aryan Dhargave
-B.Tech Computer Science Engineering
-Project: Crime Type Prediction using Machine Learning
+### 🔬 Methodology Diagram
 
-🛠️ Future Enhancements
-
-Add more years and regions for richer predictions
-
-Visualize district-wise crime trends on a map
-
-Use advanced models (XGBoost, LSTM) for better accuracy
-
-Implement multi-crime probability prediction
+```text
+          ┌───────────────────────────────┐
+          │   Crime Dataset (CSV File)    │
+          └──────────────┬────────────────┘
+                         │
+                         ▼
+        ┌────────────────────────────────────┐
+        │ Data Preprocessing & Cleaning       │
+        │ - Handle missing values             │
+        │ - Encode categorical columns        │
+        │ - Create target variable (top_crime)│
+        └──────────────────┬─────────────────┘
+                           │
+                           ▼
+       ┌────────────────────────────────────┐
+       │ Model Training & Evaluation         │
+       │ - Train Random Forest, LogisticReg. │
+       │ - Compare accuracies                │
+       │ - Save best model as .pkl           │
+       └──────────────────┬─────────────────┘
+                          │
+                          ▼
+          ┌──────────────────────────────────┐
+          │ Streamlit Web App (app.py)       │
+          │ - User inputs: Year, State, Dist │
+          │ - Outputs: Predicted Crime Type  │
+          └──────────────────────────────────┘
